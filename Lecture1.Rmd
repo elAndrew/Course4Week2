@@ -7,24 +7,57 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+dir <- "/Users/andrew/Course4Week2"
+setwd(dir)
 ```
 
-## R Markdown
+Lattice functions generally take a formula for their first argurment, usually in the form:
+```
+xyplot(y ~ x | f * g, data)
+```
+To put this into words - I want to look at the scatterplot of y and x, for every level of f and g.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+* Formula notion is used, hence the ~
+* On the left of th ~ is y-axis variable, on the right is the x-axis variable
+* f and g are _conditioning_ variables - they are optional
+  + the * indicates an interaction between two variables
+* The second argument is the data frame or the list from which the variables in the formula should be looked up
+  + If no tata frame or list is passed, then the parent frame is used
+* If no other aguments are passed, there are defaults that can be used
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Here is a simple scatterplot using xyplot() - a lattice plotting function
+```{r, message=FALSE}
+library(lattice)
+library(datasets)
 
-```{r cars}
-summary(cars)
+xyplot(Ozone ~ Wind, data = airquality)
 ```
 
-## Including Plots
+Here's a slightly more complicated lattice plot.  Plotting Ozone and Wind, by month (each level of the variable month):
+```{r, warning=FALSE}
+#first, we will just convert 'Month' to a factor variable:
+airquality <- transform(airquality, Month = factor(Month))
 
-You can also embed plots, for example:
+#note that this dataset only has data for months 5, 6, 7, 8, and 9
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+xyplot(Ozone ~ Wind | Month, data = airquality, layout = c(5,1))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Lattice functions don't actually print directly to device (screen, PDF, png, etc.).  They actually embed a print function into the plot function.  When you call the plot function, the print function will happen automatically.
+
+You can save the plot as an object, and it won't print until you call the print function:
+```{r}
+p <- xyplot(Ozone ~ Wind, data = airquality)
+```
+Nothing happened...
+
+Until we call the print() function:
+```{r}
+print(p)
+```
+
+In normal use, it is autoprinted:
+```{r}
+xyplot(Ozone ~ Wind, data = airquality)
+```
