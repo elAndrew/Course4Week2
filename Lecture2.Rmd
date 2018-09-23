@@ -1,0 +1,80 @@
+---
+title: "ggplot"
+author: "Andrew Witherspoon"
+date: "9/22/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+dir <- "/Users/andrew/Course4Week2"
+setwd(dir)
+```
+
+For these examples, we will be using the mpg dataset:
+```{r}
+library(ggplot2)
+str(mpg)
+```
+
+This data frame uses clearly labled factors to subset the data, which is important for the ggplot style of graphing.
+
+
+A simple plot, using "quick plot"" - qplot()
+```{r}
+qplot(displ, hwy, data = mpg)
+```
+
+Now let's do it again, but use the color call to subset by shape, on the drv variable:
+```{r}
+qplot(displ, hwy, data = mpg, shape = drv)
+```
+
+You can specify the way the data is presented using the geom argument.  qplot will attempt to guess what geom you want depending on the input:
+
+# both x and y supplied = scatterplot
+qplot(mpg, wt, data = mtcars)
+# just x supplied = histogram
+qplot(mpg, data = mtcars)
+# just y supplied = scatterplot, with x = seq_along(y)
+qplot(y = mpg, data = mtcars)
+
+Or, of course, you can specify.  Here is geom = "point":
+```{r}
+qplot(displ, hwy, data = mpg, geom = "point")
+```
+
+And geom = "smooth":
+```{r}
+qplot(displ, hwy, data = mpg, geom = "smooth")
+```
+
+Or - we could do both using geoom = c("point", "smooth"):
+```{r}
+qplot(displ, hwy, data = mpg, geom = c("point", "smooth"))
+```
+
+As stated above, supplying only one variable will default to the histogram geom:
+```{r}
+qplot(hwy, data = mpg, fill = drv)
+```
+
+Instead of using different shapes or colors to subset data by a factor variable, we can use facets (similar to a lattice plot):
+```{r}
+qplot(displ, hwy, data = mpg, facets = .~drv)
+```
+
+Here, we do facets with a histogram:
+```{r}
+qplot(hwy, data= mpg, facets = drv~., binwidth = 2)
+```
+
+The format for the facets argument is a variable to the left of the ~ to indicate rows, and a variable on the right of the ~ to indicate columns, to create a matrix of plots.
+
+In each of these cases, there is only one row/column, so a dot is used on one side of the ~
+
+Here is one with two variables for the facets argument:
+```{r}
+qplot(displ, hwy, data = mpg, facets = cyl~drv)
+```

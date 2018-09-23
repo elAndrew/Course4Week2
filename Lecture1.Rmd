@@ -19,7 +19,7 @@ xyplot(y ~ x | f * g, data)
 To put this into words - I want to look at the scatterplot of y and x, for every level of f and g.
 
 * Formula notion is used, hence the ~
-* On the left of th ~ is y-axis variable, on the right is the x-axis variable
+* On the left of the ~ is y-axis variable, on the right is the x-axis variable
 * f and g are _conditioning_ variables - they are optional
   + the * indicates an interaction between two variables
 * The second argument is the data frame or the list from which the variables in the formula should be looked up
